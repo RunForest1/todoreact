@@ -66,7 +66,6 @@ export const TaskInput: React.FC = () => {
   }
 
   const onClickMenu: MenuProps['onClick'] = (e) => {
-    console.log(e.key);
     sortTasks(e.key);
     setCurrent(e.key);
   };

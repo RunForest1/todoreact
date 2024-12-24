@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { TodoContext } from './TodoContext';
+import axios from 'axios';
 
 export type Todo = {
   id: number;
@@ -9,36 +10,41 @@ export type Todo = {
   favorite: boolean;
 };
 
-export const TASKS = [
-  {
-    id: 1,
-    name: 'Task 1',
-    description: 'Description 1',
-    checked: false,
-    favorite: false,
-  },
-  {
-    id: 2,
-    name: 'Task 2',
-    description: 'Description 2',
-    checked: false,
-    favorite: false,
-  },
-  {
-    id: 3,
-    name: 'Task 3',
-    description: 'Description 3',
-    checked: true,
-    favorite: true,
-  },
-];
-
 interface TodoProviderProps {
   children: React.ReactNode;
 }
 
 export const TodoProvider: React.FC<TodoProviderProps> = ({ children }) => {
-  const [tasks, setTasks] = useState<Todo[]>(TASKS);
+  const [tasks, setTasks] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    const fetchtodos = async () => {
+      const { data } = await axios.get('https://cms.laurence.host/api');
+      setTasks(data);
+    };
+
+    fetchtodos();
+  }, []);
+
+  useEffect(() => {
+    const saveTodos = () => {
+      localStorage.setItem('todos', JSON.stringify(tasks));
+    };
+
+    window.addEventListener('beforeunload', saveTodos);
+
+    return () => {
+      window.removeEventListener('beforeunload', saveTodos);
+    };
+  }, [tasks]);
+
+  useEffect(() => {
+    const savedTodos = localStorage.getItem('todos');
+
+    if (savedTodos) {
+      setTasks(JSON.parse(savedTodos));
+    }
+  }, []);
 
   const addTask = ({
     name,
@@ -107,4 +113,5 @@ export const TodoProvider: React.FC<TodoProviderProps> = ({ children }) => {
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
 };
+
 

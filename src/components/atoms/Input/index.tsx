@@ -26,7 +26,7 @@ export const InputBox: React.FC<InputProps> = ({task, onChange, type}) => {
         />
       ) : (
         <TextArea
-          style={{ minWidth: '35%', color: 'black', overflow: 'auto' }}
+          style={{ minWidth: '35%', color: 'black'}}
           placeholder="Description"
           value={task.description}
           id="description"
