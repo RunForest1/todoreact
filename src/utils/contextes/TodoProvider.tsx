@@ -19,7 +19,7 @@ export const TodoProvider: React.FC<TodoProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const fetchtodos = async () => {
-      const { data } = await axios.get('https://cms.laurence.host/api');
+      const { data } = await axios.get('https://cms.laurence.host/api', {});
       setTasks(data);
     };
 
@@ -113,5 +113,4 @@ export const TodoProvider: React.FC<TodoProviderProps> = ({ children }) => {
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
 };
-
 
