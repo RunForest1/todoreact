@@ -1,32 +1,31 @@
 import { Menu } from "antd"
-import type { MenuProps } from 'antd';
-import React, { useState } from "react";
+import type { MenuProps } from 'antd'
+import React, { useState } from "react"
 import styled from "styled-components"
-import { But } from "../../atoms/Button";
-import { TodoContext } from "../../../utils";
-import { InputBox } from "../../atoms/Input";
+import { But } from "../../atoms/Button"
+import { TodoContext } from "../../../utils"
+import { InputBox } from "../../atoms/Input"
 
-const Div = styled.div`
-    width: 50%;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: #183B5E;
-    padding: 20px;
-    border-radius: 5px 5px 0 0;
-    gap: 25px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+const InputWrapper = styled.div`
+  width: 50%;
+  margin: 0 auto;
+  background-color: #183b5e;
+  padding: 20px;
+  border-radius: 5px 5px 0 0;
+  gap: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
-const DEFAULT = {
+const DEFAULT_INPUT = {
   task: "",
   description: "",
-};
+}
 
-type MenuItem = Required<MenuProps>['items'][number];
+type MenuItem = Required<MenuProps>['items'][number]
 
-const items: MenuItem[] = [
+const menuItems: MenuItem[] = [
   {
     label: 'Sorting',
     key: 'sort',
@@ -49,51 +48,50 @@ const items: MenuItem[] = [
       },
     ],
   },
-];
+]
 
 export const TaskInput: React.FC = () => {
-  
-  const { addTask, sortTasks } = React.useContext(TodoContext);
-  const [task, setTask] = useState(DEFAULT);
+  const { addTask, sortTasks } = React.useContext(TodoContext)
+  const [input, setInput] = useState(DEFAULT_INPUT)
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const { name, value } = e.target;
-      setTask({ ...task, [name]: value });
+    const { name, value } = e.target
+    setInput({ ...input, [name]: value })
   }
 
   const onClick = () => {
-    addTask({name: task.task, description: task.description});
-    setTask(DEFAULT);
+    addTask({ name: input.task, description: input.description })
+    setInput(DEFAULT_INPUT)
   }
 
   const onClickMenu: MenuProps['onClick'] = (e) => {
-    sortTasks(e.key);
-    setCurrent(e.key);
-  };
-  const [current, setCurrent] = useState('1');
+    sortTasks(e.key)
+    setCurrent(e.key)
+  }
+  const [current, setCurrent] = useState('1')
 
   return (
-    <Div>
-        <InputBox
-        task = {task}
-        type = "task"
+    <InputWrapper>
+      <InputBox
+        task={input}
+        type="task"
         onChange={onChange}
-        />
-        <InputBox
-        task={task}
+      />
+      <InputBox
+        task={input}
         type="description"
         onChange={onChange}
-        />
-        <But color='white' onClick={onClick}>Add</But>
-        <Menu 
-        style={{borderRadius: "25px", border: "none", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"}}
+      />
+      <But color='white' onClick={onClick}>Add</But>
+      <Menu
+        style={{ borderRadius: "25px", border: "none", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}
         defaultSelectedKeys={['1']}
-        onClick={onClickMenu} 
-        selectedKeys={[current]} 
-        mode="inline" 
+        onClick={onClickMenu}
+        selectedKeys={[current]}
+        mode="inline"
         theme="dark"
-        items={items} 
-        />
-    </Div>
+        items={menuItems}
+      />
+    </InputWrapper>
   )
 }
 
